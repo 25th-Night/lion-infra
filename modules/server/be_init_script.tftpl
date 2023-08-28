@@ -1,20 +1,20 @@
 #!/bin/bash
 
-USERNAME=${username}
-PASSWORD=${password}
-DJANGO_SECRET_MODULE=${django_settings_module}
-DJANGO_SECRET_KEY=${django_secret_key}
-CONTAINER_NAME=${django_container_name}
-NCR_HOST=${ncr_host}
-NCR_IMAGE=${ncr_image}
-NCP_ACCESS_KEY=${ncp_access_key}
-NCP_SECRET_KEY=${ncp_secret_key}
-NCP_LB_DOMAIN=${ncp_lb_domain}
-POSTGRES_DB=${postgres_db}
-POSTGRES_USER=${postgres_user}
-POSTGRES_PASSWORD=${postgres_password}
-POSTGRES_PORT=${postgres_port}
-DB_HOST=${db_host}
+USERNAME="${username}"
+PASSWORD="${password}"
+DJANGO_SETTINGS_MODULE="${django_settings_module}"
+DJANGO_SECRET_KEY="${django_secret_key}"
+CONTAINER_NAME="${django_container_name}"
+NCR_HOST="${ncr_host}"
+NCR_IMAGE="${ncr_image}"
+NCP_ACCESS_KEY="${ncp_access_key}"
+NCP_SECRET_KEY="${ncp_secret_key}"
+NCP_LB_DOMAIN="${ncp_lb_domain}"
+POSTGRES_DB="${postgres_db}"
+POSTGRES_USER="${postgres_user}"
+POSTGRES_PASSWORD="${postgres_password}"
+POSTGRES_PORT="${postgres_port}"
+DB_HOST="${db_host}"
 
 
 REMOTE_DIRECTORY=/home/$USERNAME/

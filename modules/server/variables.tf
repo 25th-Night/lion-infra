@@ -24,6 +24,10 @@ variable "subnet_id" {
   type = number
 }
 
+variable "server_image_code" {
+  type = string
+}
+
 variable "server_produt_code" {
   type = string
 }

@@ -60,8 +60,8 @@ resource "ncloud_init_script" "main" {
 
 resource "ncloud_server" "main" {
   subnet_no                 = var.subnet_id
-  name                      = "${var.name}-server-${var.env}"
-  server_image_product_code = "SW.VSVR.OS.LNX64.UBNTU.SVR2004.B050"
+  name                      = "${var.name}-${var.env}"
+  server_image_product_code = var.server_image_code
   server_product_code       = var.server_produt_code
   login_key_name            = ncloud_login_key.main.key_name
   init_script_no            = ncloud_init_script.main.init_script_no
