@@ -48,20 +48,20 @@ echo "DB_CONTAINER_NAME=$CONTAINER_NAME" >> $ENV_PATH
 
 echo "Set alias to \"$BASH_ALIASES\" file"
 touch $BASH_ALIASES
-echo "alias dpsls=\"docker ps && docker logs $CONTAINER_NAME\"" >> $BASH_ALIASES
 echo "alias dps=\"docker ps\"" >> $BASH_ALIASES
 echo "alias dpsa=\"docker ps -a\"" >> $BASH_ALIASES
 echo "alias dimg=\"docker image\"" >> $BASH_ALIASES
 echo "alias dimgs=\"docker images\"" >> $BASH_ALIASES
 echo "alias drst=\"docker restart\"" >> $BASH_ALIASES
 echo "alias dlog=\"docker logs\"" >> $BASH_ALIASES
-echo "alias dexc=\"docker exec $CONTAINER_NAME\"" >> $BASH_ALIASES
-echo "alias dexib=\"docker exec -it $CONTAINER_NAME bash\"" >> $BASH_ALIASES
-echo "alias dstrm=\"docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME\"" >> $BASH_ALIASES
-echo "alias dpsql=\"docker exec -it $CONTAINER_NAME -U $POSTGRES_USER -d $POSTGRES_DB\"" >> $BASH_ALIASES
+echo "alias dpsls=\"docker ps && docker logs \$DB_CONTAINER_NAME\"" >> $BASH_ALIASES
+echo "alias dexc=\"docker exec \$DB_CONTAINER_NAME\"" >> $BASH_ALIASES
+echo "alias dexib=\"docker exec -it \$DB_CONTAINER_NAME bash\"" >> $BASH_ALIASES
+echo "alias dstrm=\"docker stop \$DB_CONTAINER_NAME && docker rm \$DB_CONTAINER_NAME\"" >> $BASH_ALIASES
+echo "alias dpsql=\"docker exec -it \$DB_CONTAINER_NAME -U \$POSTGRES_USER -d \$POSTGRES_DB\"" >> $BASH_ALIASES
 
-echo "if [ -f ~/.env ]; then" >> $BASHRC
-echo "    . ~/.env" >> $BASHRC
+echo "if [ -f $ENV_PATH ]; then" >> $BASHRC
+echo "    . $ENV_PATH" >> $BASHRC
 echo "fi" >> $BASHRC
 
 

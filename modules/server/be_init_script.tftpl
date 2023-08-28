@@ -62,19 +62,20 @@ echo "DB_HOST=$DB_HOST" >> $ENV_PATH
 
 echo "Set alias to \"$BASH_ALIASES\" file"
 touch $BASH_ALIASES
-echo "alias dpsls=\"docker ps && docker logs $CONTAINER_NAME\"" >> $BASH_ALIASES
 echo "alias dps=\"docker ps\"" >> $BASH_ALIASES
 echo "alias dpsa=\"docker ps -a\"" >> $BASH_ALIASES
 echo "alias dimg=\"docker image\"" >> $BASH_ALIASES
 echo "alias dimgs=\"docker images\"" >> $BASH_ALIASES
 echo "alias drst=\"docker restart\"" >> $BASH_ALIASES
 echo "alias dlog=\"docker logs\"" >> $BASH_ALIASES
-echo "alias dexc=\"docker exec $CONTAINER_NAME\"" >> $BASH_ALIASES
-echo "alias dexib=\"docker exec -it $CONTAINER_NAME bash\"" >> $BASH_ALIASES
-echo "alias dstrm=\"docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME\"" >> $BASH_ALIASES
+echo "alias dpsls=\"docker ps && docker logs \$DJANGO_CONTAINER_NAME\"" >> $BASH_ALIASES
+echo "alias dexc=\"docker exec \$DJANGO_CONTAINER_NAME\"" >> $BASH_ALIASES
+echo "alias dexib=\"docker exec -it \$DJANGO_CONTAINER_NAME bash\"" >> $BASH_ALIASES
+echo "alias dstrm=\"docker stop \$DJANGO_CONTAINER_NAME && docker rm \$DJANGO_CONTAINER_NAME\"" >> $BASH_ALIASES
+echo "alias drundj=\"docker run -d -p 8000:8000 --name \$DJANGO_CONTAINER_NAME --env-file .env \$NCR_HOST/\$NCR_IMAGE\"" >> $BASH_ALIASES
 
-echo "if [ -f ~/.env ]; then" >> $BASHRC
-echo "    . ~/.env" >> $BASHRC
+echo "if [ -f $ENV_PATH ]; then" >> $BASHRC
+echo "    . $ENV_PATH" >> $BASHRC
 echo "fi" >> $BASHRC
 
 
