@@ -4,6 +4,10 @@ terraform {
     ncloud = {
       source = "NaverCloudPlatform/ncloud"
     }
+    ssh = {
+      source  = "loafoe/ssh"
+      version = "2.6.0"
+    }
   }
   required_version = ">= 0.13"
 }
@@ -14,6 +18,10 @@ provider "ncloud" {
   region      = "KR"
   site        = "public"
   support_vpc = true
+}
+
+provider "ssh" {
+
 }
 
 locals {
@@ -56,6 +64,51 @@ data "ncloud_server_product" "product" {
     values = ["HICPU"]
   }
 }
+
+resource "ssh_resource" "init_db" {
+  depends_on = [module.be]
+  when       = "create"
+
+  host     = ncloud_public_ip.db.public_ip
+  user     = var.username
+  password = var.password
+
+  timeout     = "1m"
+  retry_delay = "5s"
+
+  file {
+    source      = "${path.module}/set_db_server.sh"
+    destination = "/home/${var.username}/init.sh"
+    permissions = "0700"
+  }
+
+  commands = [
+    "/home/${var.username}/init.sh"
+  ]
+}
+
+resource "ssh_resource" "init_be" {
+  depends_on = [module.be]
+  when       = "create"
+
+  host     = ncloud_public_ip.be.public_ip
+  user     = var.username
+  password = var.password
+
+  timeout     = "1m"
+  retry_delay = "5s"
+
+  file {
+    source      = "${path.module}/set_be_server.sh"
+    destination = "/home/${var.username}/init.sh"
+    permissions = "0700"
+  }
+
+  commands = [
+    "/home/${var.username}/init.sh"
+  ]
+}
+
 
 
 module "network" {
