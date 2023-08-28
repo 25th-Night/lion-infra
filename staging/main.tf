@@ -4,11 +4,13 @@ terraform {
     ncloud = {
       source = "NaverCloudPlatform/ncloud"
     }
+
     ssh = {
       source  = "loafoe/ssh"
       version = "2.6.0"
     }
   }
+
   required_version = ">= 0.13"
 }
 
@@ -109,6 +111,13 @@ resource "ssh_resource" "init_be" {
   ]
 }
 
+resource "ncloud_public_ip" "db" {
+  server_instance_no = module.db.server_instance_no
+}
+
+resource "ncloud_public_ip" "be" {
+  server_instance_no = module.be.server_instance_no
+}
 
 
 module "network" {
@@ -177,13 +186,6 @@ module "be" {
   }
 }
 
-resource "ncloud_public_ip" "db" {
-  server_instance_no = module.db.server_instance_no
-}
-
-resource "ncloud_public_ip" "be" {
-  server_instance_no = module.be.server_instance_no
-}
 
 module "load_balancer" {
   source = "../modules/loadBalancer"
@@ -194,8 +196,3 @@ module "load_balancer" {
   vpc_id                = module.network.vpc_id
   be_server_instance_no = module.be.server_instance_no
 }
-
-
-
-
-
