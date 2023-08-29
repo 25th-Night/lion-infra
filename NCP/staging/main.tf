@@ -68,7 +68,7 @@ data "ncloud_server_product" "product" {
 }
 
 resource "ssh_resource" "init_db" {
-  depends_on = [module.be]
+  depends_on = [module.db]
   when       = "create"
 
   host     = ncloud_public_ip.db.public_ip
