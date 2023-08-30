@@ -4,20 +4,11 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
-
-    ssh = {
-      source  = "loafoe/ssh"
-      version = "2.6.0"
-    }
   }
 }
 
 provider "aws" {
   region = "ap-northeast-2"
-}
-
-provider "ssh" {
-
 }
 
 locals {
@@ -31,50 +22,6 @@ locals {
   be_name             = "be"
   be_init_script_path = "be_init_script.tftpl"
 
-}
-
-resource "ssh_resource" "init_db" {
-  depends_on = [module.db]
-  when       = "create"
-
-  host        = module.db.public_ip
-  user        = var.username
-  private_key = file("~/.ssh/id_rsa")
-
-  timeout     = "2m"
-  retry_delay = "5s"
-
-  file {
-    source      = "${path.module}/set_db_server.sh"
-    destination = "/home/${var.username}/init.sh"
-    permissions = "0700"
-  }
-
-  commands = [
-    "/home/${var.username}/init.sh"
-  ]
-}
-
-resource "ssh_resource" "init_be" {
-  depends_on = [module.be]
-  when       = "create"
-
-  host        = module.be.public_ip
-  user        = var.username
-  private_key = file("~/.ssh/id_rsa")
-
-  timeout     = "2m"
-  retry_delay = "5s"
-
-  file {
-    source      = "${path.module}/set_be_server.sh"
-    destination = "/home/${var.username}/init.sh"
-    permissions = "0700"
-  }
-
-  commands = [
-    "/home/${var.username}/init.sh"
-  ]
 }
 
 module "network" {
@@ -142,6 +89,6 @@ module "load_balancer" {
   env         = local.env
   name        = local.be_name
   vpc_id      = module.network.vpc_id
-  subnet_id   = module.network.lb_subnet_id
+  subnet_id   = module.network.subnet_id
   instance_id = module.be.instance_id
 }
