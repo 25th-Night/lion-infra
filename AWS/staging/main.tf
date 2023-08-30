@@ -21,7 +21,6 @@ locals {
   be_port             = 8000
   be_name             = "be"
   be_init_script_path = "be_init_script.tftpl"
-
 }
 
 module "network" {
@@ -80,6 +79,8 @@ module "be" {
     postgres_password      = var.postgres_password
     postgres_port          = var.postgres_port
     db_host                = module.db.public_ip
+    aws_access_key         = var.aws_access_key
+    aws_secret_key         = var.aws_secret_key
   }
 }
 
