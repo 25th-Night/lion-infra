@@ -15,6 +15,8 @@ POSTGRES_USER="${postgres_user}"
 POSTGRES_PASSWORD="${postgres_password}"
 POSTGRES_PORT="${postgres_port}"
 DB_HOST="${db_host}"
+AWS_ACCESS_KEY="${aws_access_key}"
+AWS_SECRET_KEY="${aws_secret_key}"
 
 
 REMOTE_DIRECTORY=/home/$USERNAME/
@@ -22,6 +24,8 @@ ENV_PATH=$REMOTE_DIRECTORY.env
 BASH_ALIASES=$REMOTE_DIRECTORY.bash_aliases
 BASHRC=$REMOTE_DIRECTORY.bashrc
 AWS_PATH=$REMOTE_DIRECTORY.aws
+AWS_CONFIG_PATH=$AWS_PATH/config
+AWS_CREDENTIALS_PATH=$AWS_PATH/credentials
 
 
 echo "Add User"
@@ -61,6 +65,18 @@ echo "POSTGRES_PORT=$POSTGRES_PORT" >> $ENV_PATH
 echo "DB_HOST=$DB_HOST" >> $ENV_PATH
 
 
+echo "Create .aws file"
+mkdir $AWS_PATH
+touch $AWS_CONFIG_PATH
+echo "[default]" >> $AWS_CONFIG_PATH
+echo "region = ap-northeast-2" >> $AWS_CONFIG_PATH
+echo "output = json" >> $AWS_CONFIG_PATH
+touch $AWS_CREDENTIALS_PATH
+echo "[default]" >> $AWS_CREDENTIALS_PATH
+echo "aws_access_key_id = $AWS_ACCESS_KEY" >> $AWS_CREDENTIALS_PATH
+echo "aws_secret_access_key = $AWS_SECRET_KEY" >> $AWS_CREDENTIALS_PATH
+
+
 echo "Set alias to \"$BASH_ALIASES\" file"
 touch $BASH_ALIASES
 echo "if [ -f $ENV_PATH ]; then" >> $BASH_ALIASES
@@ -86,27 +102,20 @@ mkdir $REMOTE_DIRECTORY.ssh
 echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCebs3wnlmzhLaNzKgv6wi+5oPBJClyNWtgMnJycbbNHHTt1HAEcMYrTHygxA83VqT0MIkc5jmfwv+hnX1CrBeSUNv2vke6XW0XHbgoLPAuZ/AwO04ft6HKVsq/zzE5MoiwJ6m30DP5zuFMIrJ/ALKY14JXImO+fH6XvuoqvtGSrf8PXqs8bl1HEYRaMTXPKWUOj8RxqZNyIwbMNQj96jdXlN48L5zDV8oQ6QsBMKWd0wr7wSWhzCkzhxsfnu/xbNui1yIBCIHf6znyYIaGulgM0e+ImTKPUgzpwe5c2SjxaRQXg7MHlFG/nN38RpRGZBVUuFKkjNSGlAY0SHCjGnC5wpYgbIYWgv3iw3Jx0kC552PKvOUtBaroKD/1vVbEarqd0HpB+eEuLgOM+u0sQcUpTAAvOD8XZ17zryllfkAdhykET/dFqtM3kHAIfVH+4bBDYnisVNG81cK+oiWALKxsSaWjP5O0IY+eKcsOgaCOAKwoc+uskyjEsbjIgbSHXAM= brown@DESKTOP-8VEJ6F3" >> $REMOTE_DIRECTORY.ssh/authorized_keys
 
 
-# 1. Fetch Environment Variables
-echo "Fetch Environment Variables"
-sed -i 's/\r$//g' $ENV_PATH
-source $ENV_PATH
 
+# Set Djanbo Server
 
-# NCR login
 echo "Login to NCR"
 docker login $NCR_HOST -u $NCP_ACCESS_KEY -p $NCP_SECRET_KEY
 
-
-# Pull Django Image from NCR
 echo "Pull Django Image from NCR"
 docker pull $NCR_HOST/$NCR_IMAGE
 
 
-# 2. Run Django Image
 echo "Run Django Image"
 sudo docker run -d \
 -p 8000:8000 \
---name $DJANGO_CONTAINER_NAME \
+--name $CONTAINER_NAME \
 -v $AWS_PATH:/root/.aws:ro \
 --env-file $ENV_PATH \
 $NCR_HOST/$NCR_IMAGE

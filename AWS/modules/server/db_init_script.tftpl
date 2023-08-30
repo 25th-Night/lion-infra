@@ -71,16 +71,12 @@ echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCebs3wnlmzhLaNzKgv6wi+5oPBJClyNWtgMn
 
 
 
-# 1. Fetch Environment variables
-echo "Fetch Environment Variables"
-sed -i 's/\r$//g' $ENV_PATH
-source $ENV_PATH
+# Set PostgreSQL DB Server
 
-# 2. Run DB image
 echo "Run postgres container"
 sudo docker run -d \
 -p 5432:5432 \
---name $DB_CONTAINER_NAME \
+--name $CONTAINER_NAME \
 --env-file $ENV_PATH \
 -v $POSTGRES_VOLUME:/var/lib/postgresql/data \
 postgres:13
