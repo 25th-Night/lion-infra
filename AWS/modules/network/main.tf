@@ -58,14 +58,3 @@ resource "aws_subnet" "main" {
     Env  = var.env
   }
 }
-
-resource "aws_subnet" "lb" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = cidrsubnet(aws_vpc.main.cidr_block, 8, 2)
-  availability_zone = "ap-northeast-2a"
-
-  tags = {
-    Name = "lb-subnet"
-    Env  = var.env
-  }
-}
