@@ -35,7 +35,9 @@ resource "aws_lb" "main" {
   name               = "${var.name}-lb-${var.env}"
   internal           = false
   load_balancer_type = "network"
-  subnets            = [var.subnet_id]
+  subnets = [
+    var.subnet_id
+  ]
 
   tags = {
     Name = "${var.name}"
