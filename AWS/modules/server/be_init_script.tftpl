@@ -85,4 +85,29 @@ mkdir $REMOTE_DIRECTORY.ssh
 echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCebs3wnlmzhLaNzKgv6wi+5oPBJClyNWtgMnJycbbNHHTt1HAEcMYrTHygxA83VqT0MIkc5jmfwv+hnX1CrBeSUNv2vke6XW0XHbgoLPAuZ/AwO04ft6HKVsq/zzE5MoiwJ6m30DP5zuFMIrJ/ALKY14JXImO+fH6XvuoqvtGSrf8PXqs8bl1HEYRaMTXPKWUOj8RxqZNyIwbMNQj96jdXlN48L5zDV8oQ6QsBMKWd0wr7wSWhzCkzhxsfnu/xbNui1yIBCIHf6znyYIaGulgM0e+ImTKPUgzpwe5c2SjxaRQXg7MHlFG/nN38RpRGZBVUuFKkjNSGlAY0SHCjGnC5wpYgbIYWgv3iw3Jx0kC552PKvOUtBaroKD/1vVbEarqd0HpB+eEuLgOM+u0sQcUpTAAvOD8XZ17zryllfkAdhykET/dFqtM3kHAIfVH+4bBDYnisVNG81cK+oiWALKxsSaWjP5O0IY+eKcsOgaCOAKwoc+uskyjEsbjIgbSHXAM= brown@DESKTOP-8VEJ6F3" >> $REMOTE_DIRECTORY.ssh/authorized_keys
 
 
+# 1. Fetch Environment Variables
+echo "Fetch Environment Variables"
+sed -i 's/\r$//g' $ENV_PATH
+source $ENV_PATH
+
+
+# NCR login
+echo "Login to NCR"
+docker login $NCR_HOST -u $NCP_ACCESS_KEY -p $NCP_SECRET_KEY
+
+
+# Pull Django Image from NCR
+echo "Pull Django Image from NCR"
+docker pull $NCR_HOST/$NCR_IMAGE
+
+
+# 2. Run Django Image
+echo "Run Django Image"
+sudo docker run -d \
+-p 8000:8000 \
+--name $DJANGO_CONTAINER_NAME \
+--env-file $ENV_PATH \
+$NCR_HOST/$NCR_IMAGE
+
+
 echo "done"
