@@ -21,6 +21,7 @@ REMOTE_DIRECTORY=/home/$USERNAME/
 ENV_PATH=$REMOTE_DIRECTORY.env
 BASH_ALIASES=$REMOTE_DIRECTORY.bash_aliases
 BASHRC=$REMOTE_DIRECTORY.bashrc
+AWS_PATH=$REMOTE_DIRECTORY.aws
 
 
 echo "Add User"
@@ -106,6 +107,7 @@ echo "Run Django Image"
 sudo docker run -d \
 -p 8000:8000 \
 --name $DJANGO_CONTAINER_NAME \
+-v $AWS_PATH:/root/.aws:ro \
 --env-file $ENV_PATH \
 $NCR_HOST/$NCR_IMAGE
 
